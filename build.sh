@@ -8,6 +8,7 @@ cleanSfml() {
     type git
 
     # Script
+    rm -rf './SFML.docset/'
     pushd './SFML/'
     git reset --hard
     git clean -fdx
@@ -41,11 +42,40 @@ buildSfml() {
 }
 
 generateSfmlDocset() {
-    echo "unimplemented"
-    exit 1
+    # Assumptions
+    test ! -e './SFML.docset/'
+    test -d './SFML/build/doc/html/'
+    test -f './resources/Info.plist'
+    test -f './resources/icon.png'
+    type sqlite3
+
+    # Script
+    mkdir -p './SFML.docset/Contents/Resources/'
+    cp -rv \
+       './SFML/build/doc/html/' \
+       './SFML.docset/Contents/Resources/Documents'
+    cp -v \
+       './resources/Info.plist' \
+       './SFML.docset/Contents/'
+    cp -v \
+       './resources/icon.png' \
+       './SFML.docset/'
+    sqlite3 './SFML.docset/Contents/Resources/docSet.dsidx' <<EOF
+CREATE TABLE searchIndex(
+  id INTEGER PRIMARY KEY, 
+  name TEXT, 
+  type TEXT, 
+  path TEXT
+);
+CREATE UNIQUE INDEX anchor ON searchIndex (name, type, path);
+EOF
+    ./scripts/extract_classes.py './SFML.docset/Contents/Resources/Documents/classes.htm' |
+        sqlite3 './SFML.docset/Contents/Resources/docSet.dsidx'
+
+    tar fvcz SFML.tgz './SFML.docset/'
 }
 
 cleanSfml
 patchSfml
 buildSfml
-# generateSfmlDocset
+generateSfmlDocset
