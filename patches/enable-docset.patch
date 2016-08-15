@@ -1,0 +1,22 @@
+diff --git a/doc/doxyfile.in b/doc/doxyfile.in
+index 7d291fa..a57754d 100644
+--- a/doc/doxyfile.in
++++ b/doc/doxyfile.in
+@@ -825,7 +825,7 @@ HTML_DYNAMIC_SECTIONS  = NO
+ # it at startup.
+ # See http://developer.apple.com/tools/creatingdocsetswithdoxygen.html for more information.
+ 
+-GENERATE_DOCSET        = NO
++GENERATE_DOCSET        = YES
+ 
+ # When GENERATE_DOCSET tag is set to YES, this tag determines the name of the
+ # feed. A documentation feed provides an umbrella under which multiple
+@@ -938,7 +938,7 @@ QHG_LOCATION           =
+ # top of each HTML page. The value NO (the default) enables the index and
+ # the value YES disables it.
+ 
+-DISABLE_INDEX          = NO
++DISABLE_INDEX          = YES
+ 
+ # This tag can be used to set the number of enum values (range [1..20])
+ # that doxygen will group on one line in the generated HTML documentation.
