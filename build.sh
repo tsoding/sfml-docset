@@ -5,7 +5,7 @@ set -ex
 cleanSfml() {
     # Assumptions
     test -d './SFML/'
-    which git
+    type git
 
     # Script
     pushd './SFML/'
@@ -18,7 +18,7 @@ patchSfml() {
     # Assumptions
     test -f './patches/enable-docset.patch'
     test -f './SFML/doc/doxyfile.in'
-    which git
+    type git
 
     # Script
     pushd './SFML/'
@@ -39,5 +39,5 @@ generateSfmlDocset() {
 
 cleanSfml
 patchSfml
-buildSfml
-generateSfmlDocset
+# buildSfml
+# generateSfmlDocset
