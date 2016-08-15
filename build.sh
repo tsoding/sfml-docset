@@ -28,8 +28,16 @@ patchSfml() {
 }
 
 buildSfml() {
-    echo "unimplemented"
-    exit 1
+    # Assumptions
+    test -d './SFML/'
+    type cmake
+
+    # Script
+    mkdir -p './SFML/build/'
+    pushd './SFML/build/'
+    cmake -DSFML_BUILD_DOC=TRUE ..
+    make -j5
+    popd
 }
 
 generateSfmlDocset() {
@@ -39,5 +47,5 @@ generateSfmlDocset() {
 
 cleanSfml
 patchSfml
-# buildSfml
+buildSfml
 # generateSfmlDocset
