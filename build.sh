@@ -9,6 +9,7 @@ cleanSfml() {
 
     # Script
     rm -rf './SFML.docset/'
+    rm -f './SFML.tgz'
     pushd './SFML/'
     git reset --hard
     git clean -fdx
@@ -44,6 +45,7 @@ buildSfml() {
 generateSfmlDocset() {
     # Assumptions
     test ! -e './SFML.docset/'
+    test ! -e './SFML.tgz'
     test -d './SFML/build/doc/html/'
     test -f './resources/Info.plist'
     test -f './resources/icon.png'
@@ -72,7 +74,7 @@ EOF
     ./scripts/extract_classes.py './SFML.docset/Contents/Resources/Documents/classes.htm' |
         sqlite3 './SFML.docset/Contents/Resources/docSet.dsidx'
 
-    tar fvcz SFML.tgz './SFML.docset/'
+    tar fvcz SFML.tgz SFML.docset
 }
 
 cleanSfml
