@@ -6,7 +6,13 @@ Docset for [Dash] and [Zeal]. Test only on Zeal at the moment. At the
 moment contains only SFML classes. But we are working on make it
 better. For latest updates follow the feed:
 
-    https://raw.githubusercontent.com/tsoding/sfml-docset/master/SFML.xml`
+For Dash:
+
+    dash://https%3A%2F%2Fraw.githubusercontent.com%2Ftsoding%2Fsfml-docset%2Fmaster%2FSFML.xml
+
+For Zeal:
+
+    https://raw.githubusercontent.com/tsoding/sfml-docset/master/SFML.xml
 
 Ran into any problems? [Submit an issue!]
 
