@@ -16,6 +16,10 @@ For Zeal:
 
 Ran into any problems? [Submit an issue!]
 
+# Building docset
+
+Well just invoke `./build.sh` and wish yourself luck!
+
 # License
 
 Scripts for generating the SFML docset are distributed under the
