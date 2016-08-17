@@ -9,6 +9,7 @@ class HTMLClassExtracter(HTMLParser):
         HTMLParser.__init__(self)
         self.classes = []
         self.current_class = None
+        self.current_data = ""
 
     def handle_starttag(self, tag, attrs):
         dattrs = dict(attrs)
@@ -17,11 +18,18 @@ class HTMLClassExtracter(HTMLParser):
 
     def handle_endtag(self, tag):
         if tag == 'a' and self.current_class is not None:
+            self.classes.append((self.current_data, self.current_class))
+
             self.current_class = None
+            self.current_data = ""
+
+    def handle_entityref(self, name):
+        if self.current_class is not None:
+            self.current_data += self.unescape("&%s;" % (name))
 
     def handle_data(self, data):
         if self.current_class is not None:
-            self.classes.append((data, self.current_class))
+            self.current_data += data
 
     def print_classes(self):
         print self.classes
