@@ -1,0 +1,6 @@
+<!-- This is just for my local testing. I simple start Python Simple
+     HTTP Server at the root of the project and feed SFML to Zeal -->
+<entry>
+  <version>2.2</version>
+  <url>http://localhost:3001/SFML.tgz</url>
+</entry>
