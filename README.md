@@ -5,7 +5,8 @@
 Docset for [Dash] and [Zeal]. Test only on Zeal at the moment. At the
 moment contains only SFML classes. But we are working on make it
 better. For latest updates follow the feed:
-`https://raw.githubusercontent.com/tsoding/sfml-docset/master/SFML.xml`
+
+    https://raw.githubusercontent.com/tsoding/sfml-docset/master/SFML.xml`
 
 Ran into any problems? [Submit an issue!]
 
