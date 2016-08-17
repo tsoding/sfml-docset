@@ -3,7 +3,7 @@
 ![screenshot](http://i.imgur.com/kltt3kv.png)
 
 Docset for [Dash] and [Zeal]. Test only on Zeal at the moment. At the
-moment contains only SFML classes. But we are working on make it
+moment contains only SFML classes. But we are working on making it
 better. For latest updates follow the feed:
 
 For Dash:
