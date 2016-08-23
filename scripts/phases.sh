@@ -39,7 +39,7 @@ buildSfml() {
     popd
 }
 
-generateSfmlDocset() {
+generateDocset() {
     # Assumptions
     test ! -e './SFML.docset/'
     test ! -e './SFML.tgz'

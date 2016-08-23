@@ -10,7 +10,7 @@ test ! -e ./SFML.tgz
 
 patchSfml
 buildSfml
-generateSfmlDocset
+generateDocset
 archiveDocset
 
 test -f ./SFML.tgz
