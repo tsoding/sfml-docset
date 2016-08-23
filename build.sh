@@ -11,6 +11,7 @@ test ! -e ./SFML.tgz
 patchSfml
 buildSfml
 generateDocset
+populateDocsetIndex
 archiveDocset
 
 test -f ./SFML.tgz

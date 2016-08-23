@@ -59,6 +59,16 @@ generateDocset() {
     cp -v \
        './resources/icon.png' \
        './SFML.docset/'
+}
+
+populateDocsetIndex() {
+    # Assumptions
+    test -d './SFML.docset/Contents/Resources/'
+    test -f './SFML.docset/Contents/Resources/Documents/classes.htm'
+    test ! -e './SFML.docset/Contents/Resources/docSet.dsidx'
+    test -f './scripts/extract_classes.py'
+    type sqlite3
+
     sqlite3 './SFML.docset/Contents/Resources/docSet.dsidx' <<EOF
 CREATE TABLE searchIndex(
   id INTEGER PRIMARY KEY, 
