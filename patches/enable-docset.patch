@@ -1,5 +1,5 @@
 diff --git a/doc/doxyfile.in b/doc/doxyfile.in
-index 7d291fa..a57754d 100644
+index 7d291fa..c83fd31 100644
 --- a/doc/doxyfile.in
 +++ b/doc/doxyfile.in
 @@ -825,7 +825,7 @@ HTML_DYNAMIC_SECTIONS  = NO
@@ -20,3 +20,12 @@ index 7d291fa..a57754d 100644
  
  # This tag can be used to set the number of enum values (range [1..20])
  # that doxygen will group on one line in the generated HTML documentation.
+@@ -1130,7 +1130,7 @@ MAN_LINKS              = NO
+ # generate an XML file that captures the structure of
+ # the code including all documentation.
+ 
+-GENERATE_XML           = NO
++GENERATE_XML           = YES
+ 
+ # The XML_OUTPUT tag is used to specify where the XML pages will be put.
+ # If a relative path is entered the value of OUTPUT_DIRECTORY will be
