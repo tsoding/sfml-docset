@@ -70,6 +70,13 @@ CREATE UNIQUE INDEX anchor ON searchIndex (name, type, path);
 EOF
     ./scripts/extract_classes.py './SFML.docset/Contents/Resources/Documents/classes.htm' |
         sqlite3 './SFML.docset/Contents/Resources/docSet.dsidx'
+}
 
+archiveDocset() {
+    # Assumptions
+    test -d './SFML.docset/'
+    type tar
+
+    # Script
     tar fvcz SFML.tgz SFML.docset
 }
