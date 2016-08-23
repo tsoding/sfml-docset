@@ -28,6 +28,7 @@ patchSfml() {
 buildSfml() {
     # Assumptions
     test -d './SFML/'
+    test ! -e './SFML/build/'
     type cmake
 
     # Script
