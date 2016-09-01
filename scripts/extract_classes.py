@@ -12,25 +12,16 @@ def dump_entries(entries):
     for (name, kind, path) in entries:
         dump_one_entry(name, kind, path)
 
+def node_to_entry(node, kind, path_ending):
+    name = node.find('name').text
+    refid = node.attrib['refid']
+    path = "%s%s" % (refid, path_ending)
+    return (name, kind, path)
 
-class XmlExtracter(object):
-    def __init__(self, indexXmlFile):
-        self.xmlRoot = ET.parse(indexXmlFile).getroot()
-
-class XmlClassExtracter(XmlExtracter):
-    def __init__(self, xmlRoot):
-        super(XmlClassExtracter, self).__init__(xmlRoot)
-
-    def __class_to_entry(self, child):
-        name = child.find('name').text
-        refid = child.attrib['refid']
-        path = "%s.htm" % (refid)
-        return (name, 'Class', path)
-
-    def dump_as_sqlite_script(self):
-        dump_entries([self.__class_to_entry(child)
-                      for child in self.xmlRoot
-                      if child.attrib['kind'] == 'class'])
+def dump_sqlite_index_script(node, xml_kind, docset_kind, path_ending):
+    dump_entries([node_to_entry(child, docset_kind, path_ending)
+                  for child in node
+                  if child.attrib['kind'] == xml_kind])
 
 def print_usage():
     print "Usage: extract_class_from_xml.py <path-to-index.xml>"
@@ -41,5 +32,16 @@ if __name__ == "__main__":
         print_usage()
         exit(1)
 
-    indexXmlFile = sys.argv[1]
-    XmlClassExtracter(indexXmlFile).dump_as_sqlite_script()
+    entities = [
+        ('class', 'Class', '.htm'),
+        ('struct', 'Struct', '.htm'),
+        ('file', 'File', '_source.htm')
+    ]
+
+    index_xml_file = sys.argv[1]
+    xml_root = ET.parse(index_xml_file).getroot()
+
+    print "BEGIN TRANSACTION;"
+    for (xml_kind, docset_kind, file_ending) in entities:
+        dump_sqlite_index_script(xml_root, xml_kind, docset_kind, file_ending)
+    print "COMMIT TRANSACTION;"
