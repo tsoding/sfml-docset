@@ -5,6 +5,13 @@
 set -ex
 
 cleanSfml
+
+test ! -e ./SFML.tgz
+
 patchSfml
 buildSfml
-generateSfmlDocset
+generateDocset
+populateDocsetIndex
+archiveDocset
+
+test -f ./SFML.tgz

@@ -28,6 +28,7 @@ patchSfml() {
 buildSfml() {
     # Assumptions
     test -d './SFML/'
+    test ! -e './SFML/build/'
     type cmake
 
     # Script
@@ -38,7 +39,7 @@ buildSfml() {
     popd
 }
 
-generateSfmlDocset() {
+generateDocset() {
     # Assumptions
     test ! -e './SFML.docset/'
     test ! -e './SFML.tgz'
@@ -58,6 +59,16 @@ generateSfmlDocset() {
     cp -v \
        './resources/icon.png' \
        './SFML.docset/'
+}
+
+populateDocsetIndex() {
+    # Assumptions
+    test -d './SFML.docset/Contents/Resources/'
+    test -f './SFML.docset/Contents/Resources/Documents/classes.htm'
+    test ! -e './SFML.docset/Contents/Resources/docSet.dsidx'
+    test -f './scripts/extract_classes.py'
+    type sqlite3
+
     sqlite3 './SFML.docset/Contents/Resources/docSet.dsidx' <<EOF
 CREATE TABLE searchIndex(
   id INTEGER PRIMARY KEY, 
@@ -67,8 +78,15 @@ CREATE TABLE searchIndex(
 );
 CREATE UNIQUE INDEX anchor ON searchIndex (name, type, path);
 EOF
-    ./scripts/extract_classes.py './SFML.docset/Contents/Resources/Documents/classes.htm' |
+    ./scripts/extract_classes.py './SFML/build/doc/xml/index.xml' |
         sqlite3 './SFML.docset/Contents/Resources/docSet.dsidx'
+}
 
+archiveDocset() {
+    # Assumptions
+    test -d './SFML.docset/'
+    type tar
+
+    # Script
     tar fvcz SFML.tgz SFML.docset
 }
