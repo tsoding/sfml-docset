@@ -21,5 +21,14 @@ class XMLClassExtracter:
             if child.attrib['kind'] == 'class':
                 self.__dump_class_insert(child)
 
+def print_usage():
+    print "Usage: extract_class_from_xml.py <path-to-index.xml>"
+
 if __name__ == "__main__":
-    XMLClassExtracter("SFML/build/doc/xml/index.xml").dump_as_sqlite_script()
+    if len(sys.argv) < 2:
+        print "Please provide path to the index.xml file"
+        print_usage()
+        exit(1)
+
+    index_file = sys.argv[1]
+    XMLClassExtracter(index_file).dump_as_sqlite_script()

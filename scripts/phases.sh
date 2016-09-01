@@ -78,7 +78,9 @@ CREATE TABLE searchIndex(
 );
 CREATE UNIQUE INDEX anchor ON searchIndex (name, type, path);
 EOF
-    ./scripts/extract_classes.py './SFML.docset/Contents/Resources/Documents/classes.htm' |
+    # ./scripts/extract_classes.py './SFML.docset/Contents/Resources/Documents/classes.htm' |
+    #     sqlite3 './SFML.docset/Contents/Resources/docSet.dsidx'
+    ./scripts/extract_class_from_xml.py './SFML/build/doc/xml/index.xml' |
         sqlite3 './SFML.docset/Contents/Resources/docSet.dsidx'
 }
 
