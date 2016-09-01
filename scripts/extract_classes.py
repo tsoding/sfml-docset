@@ -4,22 +4,24 @@
 import sys
 import xml.etree.ElementTree as ET
 
-class XMLClassExtracter:
-    def __init__(self, indexXmlFileName):
-        self.root = ET.parse(indexXmlFileName).getroot()
+def dump_one_entry(name, kind, path):
+    print ("INSERT INTO searchIndex (name, type, path) "
+           "VALUES ('%s', '%s', '%s');") % (name, kind, path)
 
-    def __dump_class_insert(self, child):
-        name = child.find('name').text
-        refid = child.attrib['refid']
-        path = "%s.htm" % (refid)
+def dump_entries(entries):
+    for (name, kind, path) in entries:
+        dump_one_entry(name, kind, path)
 
-        print ("INSERT INTO searchIndex (name, type, path) "
-               "VALUES ('%s', 'Class', '%s');") % (name, path)
+def node_to_entry(node, kind, path_ending):
+    name = node.find('name').text
+    refid = node.attrib['refid']
+    path = "%s%s" % (refid, path_ending)
+    return (name, kind, path)
 
-    def dump_as_sqlite_script(self):
-        for child in self.root:
-            if child.attrib['kind'] == 'class':
-                self.__dump_class_insert(child)
+def dump_sqlite_index_script(node, xml_kind, docset_kind, path_ending):
+    dump_entries([node_to_entry(child, docset_kind, path_ending)
+                  for child in node
+                  if child.attrib['kind'] == xml_kind])
 
 def print_usage():
     print "Usage: extract_class_from_xml.py <path-to-index.xml>"
@@ -30,5 +32,16 @@ if __name__ == "__main__":
         print_usage()
         exit(1)
 
-    index_file = sys.argv[1]
-    XMLClassExtracter(index_file).dump_as_sqlite_script()
+    entities = [
+        ('class', 'Class', '.htm'),
+        ('struct', 'Struct', '.htm'),
+        ('file', 'File', '_source.htm')
+    ]
+
+    index_xml_file = sys.argv[1]
+    xml_root = ET.parse(index_xml_file).getroot()
+
+    print "BEGIN TRANSACTION;"
+    for (xml_kind, docset_kind, file_ending) in entities:
+        dump_sqlite_index_script(xml_root, xml_kind, docset_kind, file_ending)
+    print "COMMIT TRANSACTION;"
