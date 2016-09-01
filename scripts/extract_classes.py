@@ -2,59 +2,33 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from HTMLParser import HTMLParser
+import xml.etree.ElementTree as ET
 
-class HTMLClassExtracter(HTMLParser):
-    def __init__(self):
-        HTMLParser.__init__(self)
-        self.classes = []
-        self.current_class = None
-        self.current_data = ""
+class XMLClassExtracter:
+    def __init__(self, indexXmlFileName):
+        self.root = ET.parse(indexXmlFileName).getroot()
 
-    def handle_starttag(self, tag, attrs):
-        dattrs = dict(attrs)
-        if tag == 'a' and dattrs.get('class') == 'el':
-            self.current_class = dattrs['href']
+    def __dump_class_insert(self, child):
+        name = child.find('name').text
+        refid = child.attrib['refid']
+        path = "%s.htm" % (refid)
 
-    def handle_endtag(self, tag):
-        if tag == 'a' and self.current_class is not None:
-            self.classes.append((self.current_data, self.current_class))
+        print ("INSERT INTO searchIndex (name, type, path) "
+               "VALUES ('%s', 'Class', '%s');") % (name, path)
 
-            self.current_class = None
-            self.current_data = ""
-
-    def handle_entityref(self, name):
-        if self.current_class is not None:
-            self.current_data += self.unescape("&%s;" % (name))
-
-    def handle_data(self, data):
-        if self.current_class is not None:
-            self.current_data += data
-
-    def print_classes(self):
-        print self.classes
-
-    def dump_to_sqite_db(self, c):
-        c.executemany("INSERT INTO searchIndex (name, type, path) VALUES (?, 'Class', ?)", self.classes)
-
-    def dump_as_sqlite_sql(self):
-        for (name, t) in self.classes:
-            print "INSERT INTO searchIndex (name, type, path) VALUES ('%s', 'Class', '%s');" % (name, t)
+    def dump_as_sqlite_script(self):
+        for child in self.root:
+            if child.attrib['kind'] == 'class':
+                self.__dump_class_insert(child)
 
 def print_usage():
-    print "Usage: extract_classes.py <path-to-classes.htm>"
+    print "Usage: extract_class_from_xml.py <path-to-index.xml>"
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print "Please provide path to the classes.htm file"
+        print "Please provide path to the index.xml file"
         print_usage()
         exit(1)
 
-    classes_file = sys.argv[1]
-
-    parser = HTMLClassExtracter()
-
-    with open(classes_file) as f:
-        parser.feed(f.read())
-
-    parser.dump_as_sqlite_sql()
+    index_file = sys.argv[1]
+    XMLClassExtracter(index_file).dump_as_sqlite_script()
