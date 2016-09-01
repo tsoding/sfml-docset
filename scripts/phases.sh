@@ -63,8 +63,8 @@ generateDocset() {
 
 populateDocsetIndex() {
     # Assumptions
+    test -f './SFML/build/doc/xml/index.xml'
     test -d './SFML.docset/Contents/Resources/'
-    test -f './SFML.docset/Contents/Resources/Documents/classes.htm'
     test ! -e './SFML.docset/Contents/Resources/docSet.dsidx'
     test -f './scripts/extract_classes.py'
     type sqlite3
